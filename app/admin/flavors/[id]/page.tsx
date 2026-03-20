@@ -71,45 +71,107 @@ export default async function HumorFlavorDetailPage({
 
         const supabase = await createClient();
 
-        const input_type = String(formData.get("input_type") ?? "").trim();
-        const output_type = String(formData.get("output_type") ?? "").trim();
-        const llm_model = String(formData.get("llm_model") ?? "").trim();
-        const step_type = String(formData.get("step_type") ?? "").trim();
+        const inputType = String(formData.get("input_type") ?? "").trim();
+        const outputType = String(formData.get("output_type") ?? "").trim();
+        const llmModel = String(formData.get("llm_model") ?? "").trim();
+        const stepType = String(formData.get("step_type") ?? "").trim();
         const temperatureRaw = String(formData.get("temperature") ?? "").trim();
-        const system_prompt = String(formData.get("system_prompt") ?? "").trim();
-        const user_prompt = String(formData.get("user_prompt") ?? "").trim();
+        const systemPrompt = String(formData.get("system_prompt") ?? "").trim();
+        const userPrompt = String(formData.get("user_prompt") ?? "").trim();
+        const description = String(formData.get("description") ?? "").trim();
 
         if (
-            !input_type ||
-            !output_type ||
-            !llm_model ||
-            !step_type ||
-            !system_prompt ||
-            !user_prompt
+            !inputType ||
+            !outputType ||
+            !llmModel ||
+            !stepType ||
+            !systemPrompt ||
+            !userPrompt
         ) {
-            throw new Error("All step fields are required (except temperature).");
+            throw new Error("All step fields are required except temperature and description.");
         }
 
-        const temperature =
+        const llm_input_type_id =
+            inputType === "image-and-text"
+                ? 1
+                : inputType === "text-only"
+                    ? 2
+                    : null;
+
+        const llm_output_type_id =
+            outputType === "string"
+                ? 1
+                : outputType === "array"
+                    ? 2
+                    : null;
+
+        const llm_model_id =
+            llmModel === "gpt-4.1"
+                ? 1
+                : null;
+
+        const humor_flavor_step_type_id =
+            stepType === "celebrity-recognition"
+                ? 1
+                : stepType === "image-description"
+                    ? 2
+                    : stepType === "general"
+                        ? 3
+                        : null;
+
+        if (llm_input_type_id === null) {
+            throw new Error("Invalid input type selected.");
+        }
+
+        if (llm_output_type_id === null) {
+            throw new Error("Invalid output type selected.");
+        }
+
+        if (llm_model_id === null) {
+            throw new Error("Invalid LLM model selected.");
+        }
+
+        if (humor_flavor_step_type_id === null) {
+            throw new Error("Invalid step type selected.");
+        }
+
+        const llm_temperature =
             temperatureRaw === "" ? null : Number(temperatureRaw);
 
-        if (temperatureRaw !== "" && Number.isNaN(temperature)) {
+        if (temperatureRaw !== "" && Number.isNaN(llm_temperature)) {
             throw new Error("Temperature must be a valid number.");
         }
+
+        const { data: existingSteps, error: existingStepsError } = await supabase
+            .from("humor_flavor_steps")
+            .select("order_by")
+            .eq("humor_flavor_id", numericId)
+            .order("order_by", { ascending: false })
+            .limit(1);
+
+        if (existingStepsError) {
+            throw new Error(existingStepsError.message);
+        }
+
+        const nextOrderBy =
+            existingSteps && existingSteps.length > 0
+                ? (existingSteps[0].order_by ?? 0) + 1
+                : 1;
 
         const now = new Date().toISOString();
 
         const { error } = await supabase.from("humor_flavor_steps").insert({
             humor_flavor_id: numericId,
-            input_type,
-            output_type,
-            llm_model,
-            step_type,
-            temperature, // 👈 now nullable
-            system_prompt,
-            user_prompt,
             created_datetime_utc: now,
-            modified_datetime_utc: now,
+            llm_temperature,
+            order_by: nextOrderBy,
+            llm_input_type_id,
+            llm_output_type_id,
+            llm_model_id,
+            humor_flavor_step_type_id,
+            llm_system_prompt: systemPrompt,
+            llm_user_prompt: userPrompt,
+            description: description === "" ? null : description,
         });
 
         if (error) {
@@ -129,7 +191,7 @@ export default async function HumorFlavorDetailPage({
             .from("humor_flavor_steps")
             .select("*")
             .eq("humor_flavor_id", numericId)
-            .order("id", { ascending: true }),
+            .order("order_by", { ascending: true }),
     ]);
 
     if (error || !data) {
@@ -262,13 +324,120 @@ export default async function HumorFlavorDetailPage({
                                         background: "rgba(255,255,255,0.8)",
                                     }}
                                 >
-                                    <p className={fors.className}>
-                                        <strong>Step ID:</strong> {step.id}
-                                    </p>
-                                    <p className={fors.className}>
-                                        <strong>Temperature:</strong>{" "}
-                                        {step.temperature ?? "NULL"}
-                                    </p>
+                                    <div style={{ marginBottom: 12 }}>
+                                        <p className={fors.className} style={{ fontWeight: 700 }}>
+                                            Step Number
+                                        </p>
+                                        <p className={fors.className}>{step.order_by ?? "—"}</p>
+                                    </div>
+
+                                    <div style={{ marginBottom: 12 }}>
+                                        <p className={fors.className} style={{ fontWeight: 700 }}>
+                                            Input Type ID
+                                        </p>
+                                        <p className={fors.className}>
+                                            {step.llm_input_type_id ?? "—"}
+                                        </p>
+                                    </div>
+
+                                    <div style={{ marginBottom: 12 }}>
+                                        <p className={fors.className} style={{ fontWeight: 700 }}>
+                                            Output Type ID
+                                        </p>
+                                        <p className={fors.className}>
+                                            {step.llm_output_type_id ?? "—"}
+                                        </p>
+                                    </div>
+
+                                    <div style={{ marginBottom: 12 }}>
+                                        <p className={fors.className} style={{ fontWeight: 700 }}>
+                                            LLM Model ID
+                                        </p>
+                                        <p className={fors.className}>
+                                            {step.llm_model_id ?? "—"}
+                                        </p>
+                                    </div>
+
+                                    <div style={{ marginBottom: 12 }}>
+                                        <p className={fors.className} style={{ fontWeight: 700 }}>
+                                            Step Type ID
+                                        </p>
+                                        <p className={fors.className}>
+                                            {step.humor_flavor_step_type_id ?? "—"}
+                                        </p>
+                                    </div>
+
+                                    <div style={{ marginBottom: 12 }}>
+                                        <p className={fors.className} style={{ fontWeight: 700 }}>
+                                            Temperature
+                                        </p>
+                                        <p className={fors.className}>
+                                            {step.llm_temperature ?? "NULL"}
+                                        </p>
+                                    </div>
+
+                                    <div style={{ marginBottom: 12 }}>
+                                        <p className={fors.className} style={{ fontWeight: 700 }}>
+                                            System Prompt
+                                        </p>
+                                        <p
+                                            className={fors.className}
+                                            style={{
+                                                whiteSpace: "pre-wrap",
+                                                overflowWrap: "break-word",
+                                            }}
+                                        >
+                                            {step.llm_system_prompt ?? "—"}
+                                        </p>
+                                    </div>
+
+                                    <div style={{ marginBottom: 12 }}>
+                                        <p className={fors.className} style={{ fontWeight: 700 }}>
+                                            User Prompt
+                                        </p>
+                                        <p
+                                            className={fors.className}
+                                            style={{
+                                                whiteSpace: "pre-wrap",
+                                                overflowWrap: "break-word",
+                                            }}
+                                        >
+                                            {step.llm_user_prompt ?? "—"}
+                                        </p>
+                                    </div>
+
+                                    <div style={{ marginBottom: 12 }}>
+                                        <p className={fors.className} style={{ fontWeight: 700 }}>
+                                            Description
+                                        </p>
+                                        <p
+                                            className={fors.className}
+                                            style={{
+                                                whiteSpace: "pre-wrap",
+                                                overflowWrap: "break-word",
+                                            }}
+                                        >
+                                            {step.description ?? "NULL"}
+                                        </p>
+                                    </div>
+
+                                    <div style={{ marginBottom: 12 }}>
+                                        <p className={fors.className} style={{ fontWeight: 700 }}>
+                                            Created
+                                        </p>
+                                        <p className={fors.className}>
+                                            {step.created_datetime_utc ?? "—"}
+                                        </p>
+                                    </div>
+
+                                    {/*<div>*/}
+                                    {/*    <p className={fors.className} style={{ fontWeight: 700 }}>*/}
+                                    {/*        Modified*/}
+                                    {/*    </p>*/}
+                                    {/*    <p className={fors.className}>*/}
+                                    {/*        {step.modified_datetime_utc ?? "—"}*/}
+                                    {/*    </p>*/}
+                                    {/*</div>*/}
                                 </div>
                             ))}
                         </div>
