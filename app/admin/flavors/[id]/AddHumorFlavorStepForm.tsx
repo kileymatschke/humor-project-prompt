@@ -110,7 +110,27 @@ export default function AddHumorFlavorStepForm({
                             <option value="" disabled>
                                 Select LLM model
                             </option>
-                            <option value="gpt-4.1">GPT-4.1</option>
+                            <option value="GPT-4.1">GPT-4.1</option>
+                            <option value="GPT-4.1-mini">GPT-4.1-mini</option>
+                            <option value="GPT-4.1-nano">GPT-4.1-nano</option>
+                            <option value="GPT-4.5-preview">GPT-4.5-preview</option>
+                            <option value="GPT-4o">GPT-4o</option>
+                            <option value="GPT-4o-mini">GPT-4o-mini</option>
+                            <option value="o1">o1</option>
+                            <option value="Grok-2-vision">Grok-2-vision</option>
+                            <option value="Grok-3">Grok-3</option>
+                            <option value="Grok-4">Grok-4</option>
+                            <option value="Gemini 2.5 Pro (was 1.5 Pro)">Gemini 2.5 Pro (was 1.5 Pro)</option>
+                            <option value="Gemini 2.5 Flash (was 1.5 Flash)">Gemini 2.5 Flash (was 1.5 Flash)</option>
+                            <option value="Gemini 2.5 Pro">Gemini 2.5 Pro</option>
+                            <option value="Gemini 2.5 Flash">Gemini 2.5 Flash</option>
+                            <option value="Gemini 2.5 Flash Lite">Gemini 2.5 Flash Lite</option>
+                            <option value="GPT 5">GPT 5</option>
+                            <option value="GPT 5 Mini">GPT 5 Mini</option>
+                            <option value="GPT 5 Nano">GPT 5 Nano</option>
+                            <option value="OpenAI">OpenAI</option>
+                            <option value="Amdin model update">Amdin model update</option>
+                            <option value="123">123</option>
                         </select>
                     </div>
 

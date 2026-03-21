@@ -1,88 +1,46 @@
 "use client";
 
-import { useState } from "react";
-import { fors } from "../../fonts/fonts";
-
 export default function DeleteHumorFlavorStepForm({
                                                       stepId,
                                                       stepNumber,
                                                       deleteHumorFlavorStep,
                                                   }: {
     stepId: number;
-    stepNumber: number | null;
-    deleteHumorFlavorStep: (formData: FormData) => Promise<void>;
+    stepNumber: number | string;
+    deleteHumorFlavorStep: (formData: FormData) => void | Promise<void>;
 }) {
-    const [confirming, setConfirming] = useState(false);
-
     return (
-        <div>
-            {!confirming ? (
-                <button
-                    type="button"
-                    onClick={() => setConfirming(true)}
-                    className={fors.className}
-                    style={{
-                        border: "none",
-                        borderRadius: 999,
-                        padding: "8px 14px",
-                        background: "#8b0000",
-                        color: "white",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                    }}
-                >
-                    DELETE
-                </button>
-            ) : (
-                <form
-                    action={deleteHumorFlavorStep}
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 8,
-                        flexWrap: "wrap",
-                    }}
-                >
-                    <input type="hidden" name="step_id" value={stepId} />
+        <form
+            action={deleteHumorFlavorStep}
+            onSubmit={(e) => {
+                const confirmed = window.confirm(
+                    `Are you sure you want to delete Step ${stepNumber}?`
+                );
 
-                    <span className={fors.className}>
-                        Delete Step {stepNumber ?? "—"}?
-                    </span>
-
-                    <button
-                        type="submit"
-                        className={fors.className}
-                        style={{
-                            border: "none",
-                            borderRadius: 999,
-                            padding: "8px 14px",
-                            background: "#8b0000",
-                            color: "white",
-                            fontWeight: 700,
-                            cursor: "pointer",
-                        }}
-                    >
-                        YES, DELETE
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => setConfirming(false)}
-                        className={fors.className}
-                        style={{
-                            border: "1px solid rgba(0,0,0,0.2)",
-                            borderRadius: 999,
-                            padding: "8px 14px",
-                            background: "white",
-                            color: "black",
-                            fontWeight: 700,
-                            cursor: "pointer",
-                        }}
-                    >
-                        CANCEL
-                    </button>
-                </form>
-            )}
-        </div>
+                if (!confirmed) {
+                    e.preventDefault();
+                }
+            }}
+            style={{ margin: 0, flexShrink: 0 }}
+        >
+            <input type="hidden" name="stepId" value={stepId} />
+            <button
+                type="submit"
+                style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: 9999,
+                    border: "1px solid rgba(0,0,0,0.15)",
+                    background: "white",
+                    cursor: "pointer",
+                    fontWeight: 700,
+                    lineHeight: 1,
+                }}
+                aria-label={`Delete Step ${stepNumber}`}
+                title={`Delete Step ${stepNumber}`}
+            >
+                ×
+            </button>
+        </form>
     );
 }
