@@ -106,7 +106,7 @@ export default function ExpandableTable({
                     ref={tableRef}
                     style={{
                         borderCollapse: "collapse",
-                        backgroundColor: "white",
+                        backgroundColor: "var(--bg)",
                         border: "1px solid #ccc",
                         minWidth: "1600px",
                     }}

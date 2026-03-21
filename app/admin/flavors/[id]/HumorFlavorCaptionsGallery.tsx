@@ -40,9 +40,10 @@ export default function HumorFlavorCaptionsGallery({
                     border: "none",
                     borderRadius: 999,
                     padding: "10px 16px",
-                    background: "#111",
-                    color: "white",
+                    background: "var(--button)",
+                    color: "var(--buttontext)",
                     fontWeight: 700,
+                    fontSize: 14,
                     cursor: "pointer",
                 }}
             >
@@ -55,8 +56,8 @@ export default function HumorFlavorCaptionsGallery({
                         flexBasis: "100%",
                         padding: 24,
                         borderRadius: 20,
-                        background: "rgba(255,255,255,0.9)",
-                        border: "1px solid rgba(0,0,0,0.1)",
+                        background: "var(--bg)",
+                        border: "1px solid var(--bg)",
                         boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
                         marginTop: 8,
                     }}
@@ -95,8 +96,8 @@ export default function HumorFlavorCaptionsGallery({
                                     style={{
                                         padding: 16,
                                         borderRadius: 16,
-                                        border: "1px solid rgba(0,0,0,0.12)",
-                                        background: "white",
+                                        border: "1px solid var(--text)",
+                                        background: "var(--card)",
                                         display: "flex",
                                         gap: 14,
                                         alignItems: "flex-start",
@@ -110,7 +111,7 @@ export default function HumorFlavorCaptionsGallery({
                                             height: 60,
                                             objectFit: "cover",
                                             borderRadius: 10,
-                                            border: "1px solid rgba(0,0,0,0.08)",
+                                            border: "1px solid var(--bg)",
                                             flexShrink: 0,
                                         }}
                                     />
@@ -125,10 +126,10 @@ export default function HumorFlavorCaptionsGallery({
                                     >
                                         <div
                                             style={{
-                                                padding: 12,
-                                                borderRadius: 12,
-                                                background: "rgba(0,0,0,0.04)",
-                                                border: "1px solid rgba(0,0,0,0.08)",
+                                                padding: 8,
+                                                borderRadius: 8,
+                                                background: "var(--card)",
+                                                border: "1px solid var(--card)",
                                             }}
                                         >
                                             <p

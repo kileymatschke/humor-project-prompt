@@ -79,7 +79,7 @@ export default function EditableHumorFlavorStepCard({
         width: "100%",
         padding: 12,
         borderRadius: 12,
-        border: "1px solid rgba(0,0,0,0.15)",
+        border: "1px solid var(--text)",
         boxSizing: "border-box" as const,
         fontSize: 14,
     };
@@ -105,9 +105,9 @@ export default function EditableHumorFlavorStepCard({
                 style={{
                     padding: "16px 20px",
                     borderRadius: 16,
-                    border: "1px solid rgba(0,0,0,0.08)",
-                    background: "rgba(255,255,255,0.8)",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+                    border: "1px solid var(--bg)",
+                    background: "var(--stepcard)",
+                    boxShadow: "0 4px 12px var(--bg)",
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
@@ -132,14 +132,14 @@ export default function EditableHumorFlavorStepCard({
                 >
                     <p
                         className={fors.className}
-                        style={{ fontWeight: 700, margin: 0, fontSize: 18 }}
+                        style={{ fontWeight: 700, margin: 0, fontSize: 18, color: "var(--text)" }}
                     >
                         Step {step.order_by ?? "—"}
                     </p>
 
                     <p
                         className={fors.className}
-                        style={{ margin: 0, fontSize: 18 }}
+                        style={{ margin: 0, fontSize: 18, color: "var(--text)" }}
                     >
                         {stepTypeLabel}
                     </p>
@@ -166,9 +166,9 @@ export default function EditableHumorFlavorStepCard({
             style={{
                 padding: 24,
                 borderRadius: 20,
-                background: "rgba(255,255,255,0.9)",
-                border: "1px solid rgba(0,0,0,0.1)",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                background: "var(--stepcard)",
+                border: "1px solid var(--bg)",
+                boxShadow: "0 8px 24px var(--bg)",
                 display: "grid",
                 gap: 16,
             }}
@@ -196,9 +196,10 @@ export default function EditableHumorFlavorStepCard({
                         border: "none",
                         borderRadius: 999,
                         padding: "10px 18px",
-                        background: "black",
-                        color: "white",
+                        background: "var(--button)",
+                        color: "var(--buttontext)",
                         fontWeight: 700,
+                        fontSize: 14,
                         cursor: "pointer",
                     }}
                 >
@@ -384,9 +385,10 @@ export default function EditableHumorFlavorStepCard({
                             border: "none",
                             borderRadius: 999,
                             padding: "10px 18px",
-                            background: "black",
-                            color: "white",
+                            background: "var(--button)",
+                            color: "var(--buttontext)",
                             fontWeight: 700,
+                            fontSize: 14,
                             cursor: "pointer",
                         }}
                     >

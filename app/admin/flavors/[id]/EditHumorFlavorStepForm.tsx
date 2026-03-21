@@ -212,9 +212,10 @@ export default function EditHumorFlavorStepForm({
                                 border: "none",
                                 borderRadius: 999,
                                 padding: "10px 18px",
-                                background: "black",
-                                color: "white",
+                                background: "var(--button)",
+                                color: "var(--buttontext)",
                                 fontWeight: 700,
+                                fontSize: 14,
                                 cursor: "pointer",
                             }}
                         >

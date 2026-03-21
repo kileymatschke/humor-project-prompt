@@ -50,8 +50,9 @@ export default function TestHumorFlavorSets({
                     border: "none",
                     borderRadius: 999,
                     padding: "10px 16px",
-                    background: "#111",
-                    color: "white",
+                    background: "var(--button)",
+                    color: "var(--buttontext)",
+                    fontSize: 14,
                     fontWeight: 700,
                     cursor: "pointer",
                 }}
@@ -65,9 +66,9 @@ export default function TestHumorFlavorSets({
                         flexBasis: "100%",
                         padding: 24,
                         borderRadius: 20,
-                        background: "rgba(255,255,255,0.9)",
-                        border: "1px solid rgba(0,0,0,0.1)",
-                        boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                        background: "var(--bg)",
+                        border: "1px solid var(--bg)",
+                        boxShadow: "0 8px 24px var(--bg)",
                         marginTop: 8,
                     }}
                 >
@@ -125,9 +126,9 @@ export default function TestHumorFlavorSets({
                                             borderRadius: 16,
                                             border:
                                                 activeSetId === set.id
-                                                    ? "2px solid black"
-                                                    : "1px solid rgba(0,0,0,0.12)",
-                                            background: "white",
+                                                    ? "2px solid var(--text)"
+                                                    : "1px solid var(--text)",
+                                            background: "var(--card)",
                                             cursor: isPending ? "not-allowed" : "pointer",
                                             opacity:
                                                 isPending && activeSetId !== set.id ? 0.6 : 1,
@@ -139,6 +140,7 @@ export default function TestHumorFlavorSets({
                                                 fontWeight: 700,
                                                 fontSize: 18,
                                                 marginBottom: 8,
+                                                color: "var(--text)"
                                             }}
                                         >
                                             {set.label}
@@ -149,6 +151,7 @@ export default function TestHumorFlavorSets({
                                             style={{
                                                 marginBottom: 12,
                                                 fontSize: 14,
+                                                color: "var(--text)"
                                             }}
                                         >
                                             {set.images.length} image
@@ -172,7 +175,7 @@ export default function TestHumorFlavorSets({
                                                         aspectRatio: "1 / 1",
                                                         objectFit: "cover",
                                                         borderRadius: 10,
-                                                        border: "1px solid rgba(0,0,0,0.08)",
+                                                        border: "1px solid var(--text)",
                                                     }}
                                                 />
                                             ))}
@@ -193,7 +196,7 @@ export default function TestHumorFlavorSets({
                         <p
                             className={fors.className}
                             style={{
-                                color: "#a11",
+                                color: "var(--errortext)",
                                 fontWeight: 700,
                             }}
                         >

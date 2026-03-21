@@ -78,9 +78,10 @@ export default function HumorFlavorsClient({
                         border: "none",
                         borderRadius: 999,
                         padding: "10px 16px",
-                        background: "#111",
-                        color: "white",
-                        fontWeight: 700,
+                        background: "var(--button)",
+                        color: "var(--buttontext)",
+                        fontWeight: 1000,
+                        fontSize: 14,
                         cursor: "pointer",
                     }}
                 >

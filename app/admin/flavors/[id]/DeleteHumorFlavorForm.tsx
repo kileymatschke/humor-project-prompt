@@ -29,9 +29,10 @@ export default function DeleteHumorFlavorForm({
                     border: "none",
                     borderRadius: 999,
                     padding: "10px 16px",
-                    background: "#111",
-                    color: "white",
+                    background: "var(--button)",
+                    color: "var(--buttontext)",
                     fontWeight: 700,
+                    fontSize: 14,
                     cursor: "pointer",
                 }}
             >

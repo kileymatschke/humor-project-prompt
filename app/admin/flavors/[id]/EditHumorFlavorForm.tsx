@@ -16,8 +16,10 @@ function SaveButton() {
                 padding: "12px 18px",
                 borderRadius: 12,
                 border: "1px solid rgba(0,0,0,0.12)",
-                background: pending ? "#f2f2f2" : "white",
+                background: pending ? "var(--button)" : "var(--button)",
+                color: "var(--buttontext)",
                 fontWeight: 700,
+                fontSize: 14,
                 cursor: pending ? "not-allowed" : "pointer",
                 boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
             }}
@@ -48,9 +50,10 @@ export default function EditHumorFlavorForm({
                     border: "none",
                     borderRadius: 999,
                     padding: "10px 16px",
-                    background: "#111",
-                    color: "white",
+                    background: "var(--button)",
+                    color: "var(--buttontext)",
                     fontWeight: 700,
+                    fontSize: 14,
                     cursor: "pointer",
                 }}
             >
@@ -152,8 +155,10 @@ export default function EditHumorFlavorForm({
                                 padding: "12px 18px",
                                 borderRadius: 12,
                                 border: "1px solid rgba(0,0,0,0.12)",
-                                background: "#f7f7f7",
+                                background: "var(--buttontext)",
+                                color: "var(--button)",
                                 fontWeight: 700,
+                                fontSize: 14,
                                 cursor: "pointer",
                             }}
                         >
