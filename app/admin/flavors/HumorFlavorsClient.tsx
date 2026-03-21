@@ -75,13 +75,13 @@ export default function HumorFlavorsClient({
                     onClick={() => setShowCreateForm(true)}
                     className={fors.className}
                     style={{
-                        padding: "14px 18px",
-                        borderRadius: 14,
-                        border: "1px solid rgba(0,0,0,0.12)",
-                        background: "white",
+                        border: "none",
+                        borderRadius: 999,
+                        padding: "10px 16px",
+                        background: "#111",
+                        color: "white",
                         fontWeight: 700,
                         cursor: "pointer",
-                        boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
                     }}
                 >
                     + CREATE

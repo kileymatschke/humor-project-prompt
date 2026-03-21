@@ -2,6 +2,8 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "../../../lib/supabase/server";
 import { adelia } from "../fonts/fonts";
 import HumorFlavorsClient from "./HumorFlavorsClient";
+import SignOutButton from "../components/SignOutButton";
+
 
 function formatUtcTimestamp() {
     const now = new Date();
@@ -70,10 +72,20 @@ export default async function HumorFlavorsPage() {
         <main style={{ padding: 24, minHeight: "100vh" }}>
             <h1
                 className={adelia.className}
-                style={{ textAlign: "center" }}
+                style={{ textAlign: "center", fontSize: 48, marginBottom: 2 }}
             >
                 Humor Flavors
             </h1>
+
+            <div
+                style={{
+                    marginBottom: 20,
+                    display: "flex",
+                    justifyContent: "center",
+                }}
+            >
+                <SignOutButton />
+            </div>
 
             <HumorFlavorsClient
                 rows={rows}

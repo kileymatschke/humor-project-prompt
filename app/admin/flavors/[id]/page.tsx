@@ -9,6 +9,13 @@ import AddHumorFlavorStepForm from "./AddHumorFlavorStepForm";
 import DeleteHumorFlavorStepForm from "./DeleteHumorFlavorStepForm";
 import EditableHumorFlavorStepCard from "./EditableHumorFlavorStepCard";
 import MoveHumorFlavorStepForm from "./MoveHumorFlavorStepForm";
+import TestHumorFlavorSets, {
+    type TestHumorFlavorState,
+} from "./TestHumorFlavorSets";
+import { TEST_IMAGE_SETS } from "./testSets";
+import HumorFlavorCaptionsGallery, {
+    type HumorFlavorCaptionGalleryItem,
+} from "./HumorFlavorCaptionsGallery";
 
 const llmModelMap: Record<string, number> = {
     "GPT-4.1": 1,
@@ -113,6 +120,11 @@ function parseHumorFlavorStepFormData(formData: FormData) {
         llm_user_prompt: userPrompt,
         description: description === "" ? null : description,
     };
+}
+
+function normalizeContentType(contentType: string | null) {
+    if (!contentType) return null;
+    return contentType.split(";")[0].trim().toLowerCase();
 }
 
 export default async function HumorFlavorDetailPage({
@@ -365,15 +377,263 @@ export default async function HumorFlavorDetailPage({
         redirect(`/admin/flavors/${numericId}`);
     }
 
+    async function testHumorFlavorSet(
+        _previousState: TestHumorFlavorState,
+        formData: FormData
+    ): Promise<TestHumorFlavorState> {
+        "use server";
+
+        try {
+            const supabase = await createClient();
+
+            const {
+                data: { session },
+                error: sessionError,
+            } = await supabase.auth.getSession();
+
+            if (sessionError) {
+                return {
+                    success: false,
+                    error: sessionError.message,
+                    results: [],
+                };
+            }
+
+            const accessToken = session?.access_token;
+
+            if (!accessToken) {
+                return {
+                    success: false,
+                    error: "No valid JWT found. Please sign in again.",
+                    results: [],
+                };
+            }
+
+            const humorFlavorId = Number(
+                String(formData.get("humorFlavorId") ?? "").trim()
+            );
+            const rawImageUrls = String(formData.get("imageUrls") ?? "").trim();
+
+            if (Number.isNaN(humorFlavorId)) {
+                return {
+                    success: false,
+                    error: "Invalid humor flavor id.",
+                    results: [],
+                };
+            }
+
+            let imageUrls: string[] = [];
+
+            try {
+                const parsed = JSON.parse(rawImageUrls);
+                imageUrls = Array.isArray(parsed) ? parsed : [];
+            } catch {
+                return {
+                    success: false,
+                    error: "Invalid image URL payload.",
+                    results: [],
+                };
+            }
+
+            if (imageUrls.length === 0) {
+                return {
+                    success: false,
+                    error: "No image URLs were provided.",
+                    results: [],
+                };
+            }
+
+            const API_BASE_URL = "https://api.almostcrackd.ai";
+
+            const SUPPORTED_TYPES = new Set([
+                "image/jpeg",
+                "image/jpg",
+                "image/png",
+                "image/webp",
+                "image/gif",
+                "image/heic",
+            ]);
+
+            const results: {
+                sourceImageUrl: string;
+                imageId: string;
+                captions: unknown[];
+            }[] = [];
+
+            for (const imageUrl of imageUrls) {
+                const sourceImageResponse = await fetch(imageUrl);
+
+                if (!sourceImageResponse.ok) {
+                    return {
+                        success: false,
+                        error: `Failed to fetch source image: ${imageUrl}`,
+                        results: [],
+                    };
+                }
+
+                const contentType = normalizeContentType(
+                    sourceImageResponse.headers.get("content-type")
+                );
+
+                if (!contentType || !SUPPORTED_TYPES.has(contentType)) {
+                    return {
+                        success: false,
+                        error: `Unsupported content type for image: ${imageUrl}. Found: ${contentType ?? "unknown"}`,
+                        results: [],
+                    };
+                }
+
+                const imageBytes = await sourceImageResponse.arrayBuffer();
+
+                const presignedResponse = await fetch(
+                    `${API_BASE_URL}/pipeline/generate-presigned-url`,
+                    {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            contentType,
+                        }),
+                    }
+                );
+
+                if (!presignedResponse.ok) {
+                    return {
+                        success: false,
+                        error: `Failed to generate presigned URL: ${await presignedResponse.text()}`,
+                        results: [],
+                    };
+                }
+
+                const presignedData: {
+                    presignedUrl: string;
+                    cdnUrl: string;
+                } = await presignedResponse.json();
+
+                const uploadResponse = await fetch(presignedData.presignedUrl, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": contentType,
+                    },
+                    body: imageBytes,
+                });
+
+                if (!uploadResponse.ok) {
+                    return {
+                        success: false,
+                        error: `Failed to upload image bytes: ${await uploadResponse.text()}`,
+                        results: [],
+                    };
+                }
+
+                const registerResponse = await fetch(
+                    `${API_BASE_URL}/pipeline/upload-image-from-url`,
+                    {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            imageUrl: presignedData.cdnUrl,
+                            isCommonUse: false,
+                        }),
+                    }
+                );
+
+                if (!registerResponse.ok) {
+                    return {
+                        success: false,
+                        error: `Failed to register uploaded image: ${await registerResponse.text()}`,
+                        results: [],
+                    };
+                }
+
+                const registerData: {
+                    imageId: string;
+                    now: number;
+                } = await registerResponse.json();
+
+                const captionsResponse = await fetch(
+                    `${API_BASE_URL}/pipeline/generate-captions`,
+                    {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            imageId: registerData.imageId,
+                            humorFlavorId,
+                        }),
+                    }
+                );
+
+                if (!captionsResponse.ok) {
+                    return {
+                        success: false,
+                        error: `Failed to generate captions: ${await captionsResponse.text()}`,
+                        results: [],
+                    };
+                }
+
+                const captions = await captionsResponse.json();
+
+                results.push({
+                    sourceImageUrl: imageUrl,
+                    imageId: registerData.imageId,
+                    captions: Array.isArray(captions) ? captions : [],
+                });
+            }
+
+            return {
+                success: true,
+                error: null,
+                results,
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error:
+                    error instanceof Error
+                        ? error.message
+                        : "Unexpected server error.",
+                results: [],
+            };
+        }
+    }
+
     const supabase = await createClient();
 
-    const [{ data, error }, { data: steps, error: stepsError }] = await Promise.all([
+    const [
+        { data, error },
+        { data: steps, error: stepsError },
+        { data: captionsData, error: captionsError },
+    ] = await Promise.all([
         supabase.from("humor_flavors").select("*").eq("id", numericId).single(),
         supabase
             .from("humor_flavor_steps")
             .select("*")
             .eq("humor_flavor_id", numericId)
             .order("order_by", { ascending: true }),
+        supabase
+            .from("captions")
+            .select(
+                `
+                id,
+                content,
+                created_datetime_utc,
+                image_id,
+                images (
+                    id,
+                    url
+                )
+            `
+            )
+            .eq("humor_flavor_id", numericId)
+            .order("created_datetime_utc", { ascending: false }),
     ]);
 
     if (error || !data) {
@@ -383,6 +643,43 @@ export default async function HumorFlavorDetailPage({
     if (stepsError) {
         throw new Error(stepsError.message);
     }
+
+    if (captionsError) {
+        throw new Error(captionsError.message);
+    }
+
+    const captionsGalleryItems: HumorFlavorCaptionGalleryItem[] = Object.values(
+        (captionsData ?? []).reduce(
+            (
+                acc: Record<string, HumorFlavorCaptionGalleryItem>,
+                row: any
+            ) => {
+                const imageId = row.image_id;
+                const imageUrl = row.images?.url ?? "";
+
+                if (!imageId || !imageUrl) {
+                    return acc;
+                }
+
+                if (!acc[imageId]) {
+                    acc[imageId] = {
+                        imageId,
+                        imageUrl,
+                        captions: [],
+                    };
+                }
+
+                acc[imageId].captions.push({
+                    id: row.id,
+                    content: row.content,
+                    created_datetime_utc: row.created_datetime_utc,
+                });
+
+                return acc;
+            },
+            {}
+        )
+    );
 
     return (
         <main
@@ -394,7 +691,7 @@ export default async function HumorFlavorDetailPage({
             <div
                 style={{
                     width: "100%",
-                    maxWidth: 800,
+                    maxWidth: 1000,
                     margin: "0 auto",
                 }}
             >
@@ -412,33 +709,7 @@ export default async function HumorFlavorDetailPage({
                     </Link>
                 </div>
 
-                <h1
-                    className={adelia.className}
-                    style={{ textAlign: "center", marginBottom: 24 }}
-                >
-                    Humor Flavor
-                </h1>
 
-                <div
-                    style={{
-                        marginBottom: 16,
-                        display: "flex",
-                        gap: 12,
-                        alignItems: "center",
-                        flexWrap: "wrap",
-                    }}
-                >
-                    <DeleteHumorFlavorForm
-                        deleteHumorFlavor={deleteHumorFlavor}
-                        slug={data.slug}
-                    />
-
-                    <EditHumorFlavorForm
-                        slug={data.slug}
-                        description={data.description}
-                        updateHumorFlavor={updateHumorFlavor}
-                    />
-                </div>
 
                 <div
                     style={{
@@ -450,31 +721,118 @@ export default async function HumorFlavorDetailPage({
                         marginBottom: 28,
                     }}
                 >
-                    <div style={{ marginBottom: 20 }}>
-                        <p className={fors.className} style={{ fontWeight: 700 }}>
-                            Slug
-                        </p>
-                        <p className={fors.className}>{data.slug ?? "—"}</p>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                            gap: 12,
+                            marginBottom: 10,
+                            flexWrap: "wrap",
+                        }}
+                    >
+                        <div>
+                            <p
+                                className={fors.className}
+                                style={{ textAlign: "left", fontSize: 14, margin: 0 }}
+                            >
+                                HUMOR FLAVOR
+                            </p>
+
+                            <p
+                                className={fors.className}
+                                style={{ textAlign: "left", fontSize: 14, margin: 0 }}
+                            >
+                                {data.created_datetime_utc ?? "—"}
+                            </p>
+                        </div>
+
+                        {/*<div*/}
+                        {/*    style={{*/}
+                        {/*        display: "flex",*/}
+                        {/*        gap: 12,*/}
+                        {/*        alignItems: "center",*/}
+                        {/*        flexWrap: "wrap",*/}
+                        {/*        justifyContent: "flex-end",*/}
+                        {/*    }}*/}
+                        {/*>*/}
+
+                        {/*    <EditHumorFlavorForm*/}
+                        {/*        slug={data.slug}*/}
+                        {/*        description={data.description}*/}
+                        {/*        updateHumorFlavor={updateHumorFlavor}*/}
+                        {/*    />*/}
+
+                        {/*    <DeleteHumorFlavorForm*/}
+                        {/*        deleteHumorFlavor={deleteHumorFlavor}*/}
+                        {/*        slug={data.slug}*/}
+                        {/*    />*/}
+
+
+                        {/*</div>*/}
                     </div>
 
-                    <div style={{ marginBottom: 20 }}>
-                        <p className={fors.className} style={{ fontWeight: 700 }}>
-                            Description
-                        </p>
-                        <p className={fors.className}>{data.description ?? "—"}</p>
+                    <p
+                        className={adelia.className}
+                        style={{
+                            textAlign: "left",
+                            marginBottom: 10,
+                            marginTop: 2,
+                            fontSize: 36,
+                        }}
+                    >
+                        {data.slug ?? "—"}
+                    </p>
+
+                    <p
+                        className={fors.className}
+                        style={{
+                            textAlign: "left",
+                            marginBottom: 20,
+                            marginTop: 2,
+                            fontSize: 18,
+                        }}
+                    >
+                        {data.description ?? "—"}
+                    </p>
+
+
+                    <div
+                        style={{
+                            display: "flex",
+                            gap: 12,            // 👈 horizontal space between buttons
+                            alignItems: "center",
+                            flexWrap: "wrap",   // 👈 keeps it responsive
+                        }}
+                    >
+
+                        <EditHumorFlavorForm
+                            slug={data.slug}
+                            description={data.description}
+                            updateHumorFlavor={updateHumorFlavor}
+                        />
+
+                        <DeleteHumorFlavorForm
+                            deleteHumorFlavor={deleteHumorFlavor}
+                            slug={data.slug}
+                        />
+
+                        <HumorFlavorCaptionsGallery items={captionsGalleryItems} />
+
+                        <TestHumorFlavorSets
+                            humorFlavorId={numericId}
+                            testSets={TEST_IMAGE_SETS}
+                            testHumorFlavorSetAction={testHumorFlavorSet}
+                        />
                     </div>
 
-                    <div>
-                        <p className={fors.className} style={{ fontWeight: 700 }}>
-                            Created
-                        </p>
-                        <p className={fors.className}>
-                            {data.created_datetime_utc ?? "—"}
-                        </p>
-                    </div>
+
+                    {/*<TestHumorFlavorSets*/}
+                    {/*    humorFlavorId={numericId}*/}
+                    {/*    testSets={TEST_IMAGE_SETS}*/}
+                    {/*    testHumorFlavorSetAction={testHumorFlavorSet}*/}
+                    {/*/>*/}
                 </div>
-
-                <AddHumorFlavorStepForm addHumorFlavorStep={addHumorFlavorStep} />
 
                 <div
                     style={{
@@ -483,14 +841,17 @@ export default async function HumorFlavorDetailPage({
                         background: "rgba(255,255,255,0.9)",
                         border: "1px solid rgba(0,0,0,0.1)",
                         boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                        marginBottom: 28
                     }}
                 >
                     <h2
                         className={adelia.className}
-                        style={{ textAlign: "center", marginBottom: 24 }}
+                        style={{ textAlign: "left", marginBottom: 24, fontSize: 28 }}
                     >
-                        Humor Flavor Steps
+                        Steps
                     </h2>
+
+                    <AddHumorFlavorStepForm addHumorFlavorStep={addHumorFlavorStep} />
 
                     {!steps || steps.length === 0 ? (
                         <p className={fors.className}>No steps yet.</p>
@@ -520,6 +881,14 @@ export default async function HumorFlavorDetailPage({
                         </div>
                     )}
                 </div>
+
+
+
+
+
+
+
+
             </div>
         </main>
     );

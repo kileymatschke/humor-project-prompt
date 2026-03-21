@@ -132,14 +132,14 @@ export default function EditableHumorFlavorStepCard({
                 >
                     <p
                         className={fors.className}
-                        style={{ fontWeight: 700, margin: 0 }}
+                        style={{ fontWeight: 700, margin: 0, fontSize: 18 }}
                     >
                         Step {step.order_by ?? "—"}
                     </p>
 
                     <p
                         className={fors.className}
-                        style={{ margin: 0 }}
+                        style={{ margin: 0, fontSize: 18 }}
                     >
                         {stepTypeLabel}
                     </p>
