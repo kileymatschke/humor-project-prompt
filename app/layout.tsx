@@ -22,35 +22,28 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
         <body>
-        {/* apply theme ASAP */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
 
-        {/* 🌙 toggle in top-right */}
         <div
             style={{
-                position: "fixed",
-                top: 20,
-                right: 20,
-                zIndex: 9999,
+                maxWidth: 900,
+                margin: "0 auto",
+                padding: 24,
             }}
         >
-            <ThemeToggle />
-        </div>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginBottom: 12,
+                }}
+            >
+                <ThemeToggle />
+            </div>
 
-        {children}
+            {children}
+        </div>
         </body>
         </html>
     );
 }
-
-// export default function RootLayout({
-//                                        children,
-//                                    }: {
-//     children: React.ReactNode
-// }) {
-//     return (
-//         <html>
-//         <body>{children}</body>
-//         </html>
-//     )
-// }

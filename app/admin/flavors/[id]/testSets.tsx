@@ -9,27 +9,27 @@ export const TEST_IMAGE_SETS: TestImageSet[] = [
         id: "set-1",
         label: "Set 1",
         images: [
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80",
+            "https://t4.ftcdn.net/jpg/05/41/26/61/360_F_541266173_K545317oNZsZFC8VWFZXpYaHAy3ERlXl.jpg",
+            "https://dl6pgk4f88hky.cloudfront.net/2025/01/15/202503TV.jpg",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxITyZNuUmTzqcU7IRGu0AQCO_LLoXfdE8oA&s",
         ],
     },
     {
         id: "set-2",
         label: "Set 2",
         images: [
-            "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmvg3mRPM6LEKL2pOmzQSO5aRg1Z2e1-Nd_A&s",
+            "https://media.npr.org/assets/img/2022/12/09/meerkat-c5338ef2def39f783b720b0a0fe06ee0890488c2.jpg",
+            "https://static.boredpanda.com/blog/wp-content/uploads/2016/01/funny-animals-eating-32__605.jpg",
         ],
     },
     {
         id: "set-3",
         label: "Set 3",
         images: [
-            "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=900&q=80",
-            "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80",
+            "https://i.pinimg.com/736x/70/39/5c/70395ca176be6a4945f7b1c57e0ed5bd.jpg",
+            "https://pagesix.com/wp-content/uploads/sites/3/2023/10/NYPICHPDPICT000071536813.jpg",
+            "https://www.hollywoodintoto.com/wp-content/uploads/2025/01/Michael-Rapaport-social-media-censorship-2.jpg",
         ],
     },
 ];
