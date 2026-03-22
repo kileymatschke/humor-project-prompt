@@ -82,6 +82,7 @@ export default function EditableHumorFlavorStepCard({
         border: "1px solid var(--text)",
         boxSizing: "border-box" as const,
         fontSize: 14,
+        background: "var(--card)"
     };
 
     const labelStyle = {

@@ -15,7 +15,7 @@ function SaveButton() {
             style={{
                 padding: "12px 18px",
                 borderRadius: 12,
-                border: "1px solid rgba(0,0,0,0.12)",
+                border: "1px solid var(--bg)",
                 background: pending ? "var(--button)" : "var(--button)",
                 color: "var(--buttontext)",
                 fontWeight: 700,
@@ -68,9 +68,9 @@ export default function EditHumorFlavorForm({
                 marginBottom: 16,
                 padding: 24,
                 borderRadius: 20,
-                background: "rgba(255,255,255,0.92)",
-                border: "1px solid rgba(0,0,0,0.1)",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                background: "var(--field)",
+                border: "1px solid var(--bg)",
+                boxShadow: "0 8px 24px var(--bg)",
                 boxSizing: "border-box",
             }}
         >
@@ -102,9 +102,9 @@ export default function EditHumorFlavorForm({
                                 width: "100%",
                                 padding: "14px 16px",
                                 borderRadius: 14,
-                                border: "1px solid rgba(0,0,0,0.15)",
-                                fontSize: "1rem",
-                                background: "white",
+                                border: "1px solid var(--bg)",
+                                fontSize: 16,
+                                background: "var(--card)",
                                 boxSizing: "border-box",
                             }}
                         />
@@ -131,9 +131,9 @@ export default function EditHumorFlavorForm({
                                 width: "100%",
                                 padding: "14px 16px",
                                 borderRadius: 14,
-                                border: "1px solid rgba(0,0,0,0.15)",
-                                fontSize: "1rem",
-                                background: "white",
+                                border: "1px solid var(--bg)",
+                                fontSize: 16,
+                                background: "var(--card)",
                                 boxSizing: "border-box",
                                 resize: "vertical",
                             }}
@@ -154,7 +154,7 @@ export default function EditHumorFlavorForm({
                             style={{
                                 padding: "12px 18px",
                                 borderRadius: 12,
-                                border: "1px solid rgba(0,0,0,0.12)",
+                                border: "1px solid var(--bg)",
                                 background: "var(--buttontext)",
                                 color: "var(--button)",
                                 fontWeight: 700,

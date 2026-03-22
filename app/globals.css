@@ -4,18 +4,24 @@
     --button: #fce9b3;
     --buttontext: #ca5310;
     --errortext: #d48aca;
-    --card: #ffffff;
-    --stepcard: #f7edf3;
-    --border: #dddddd;
+    --card: #f5f6f7;
+    --field: #ffffff;
+    --pickaccent: #f7edf3;
+    --stepcard: #ffffff;
+    --allflavorsbg: #ffffff;
 }
 
 html[data-theme="dark"] {
-    --bg: #111111;
-    --text: #f5f5f5;
-    --button: #1a1a1a;
-    --buttontext: #111111;
+    --bg: #355070;
+    --text: #ecf8f8;
+    --button: #ca5310;
+    --buttontext: #fce9b3;
     --errortext: #111111;
-    --border: #333333;
+    --card: #355070;
+    --field: #011a38;
+    --pickaccent: #f7edf3;
+    --stepcard: #011a38;
+    --allflavorsbg: #ecf8f8
 }
 
 body {

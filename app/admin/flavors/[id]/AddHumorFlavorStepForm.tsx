@@ -15,6 +15,7 @@ export default function AddHumorFlavorStepForm({
         padding: 12,
         borderRadius: 12,
         border: "1px solid var(--text)",
+        background: "var(--card)",
         boxSizing: "border-box" as const,
         fontSize: 14,
     };
@@ -52,7 +53,7 @@ export default function AddHumorFlavorStepForm({
                     style={{
                         padding: 24,
                         borderRadius: 20,
-                        background: "var(--bg)",
+                        background: "var(--field)",
                         border: "1px solid var(--bg)",
                         boxShadow: "0 8px 24px var(--bg)",
                         display: "grid",

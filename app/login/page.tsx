@@ -31,12 +31,21 @@ export default function LoginPage() {
                 gap: "20px"
             }}
         >
-            <h1 style={{ fontSize: "40px"}} className={adelia.className}>Sign in</h1>
+            {/*<h1 style={{ fontSize: "40px"}} className={adelia.className}>Sign in</h1>*/}
 
             <button
                 onClick={signInWithGoogle}
-                style={{ fontSize: "20px", fontWeight: "bold" }}
-                className={kindergarten.className}
+                style={{
+                    border: "none",
+                    borderRadius: 999,
+                    padding: "10px 16px",
+                    background: "var(--text)",
+                    color: "var(--bg)",
+                    fontWeight: 700,
+                    fontSize: 24,
+                    cursor: "pointer",
+                }}
+                className={adelia.className}
             >
                 Sign in with Google
             </button>

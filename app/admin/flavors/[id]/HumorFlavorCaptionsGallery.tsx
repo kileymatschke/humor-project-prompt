@@ -56,7 +56,7 @@ export default function HumorFlavorCaptionsGallery({
                         flexBasis: "100%",
                         padding: 24,
                         borderRadius: 20,
-                        background: "var(--bg)",
+                        background: "var(--field)",
                         border: "1px solid var(--bg)",
                         boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
                         marginTop: 8,

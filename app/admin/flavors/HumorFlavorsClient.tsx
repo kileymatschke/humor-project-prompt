@@ -20,12 +20,14 @@ function SubmitButton() {
             className={fors.className}
             disabled={pending}
             style={{
-                padding: "12px 18px",
-                borderRadius: 12,
-                border: "1px solid rgba(0,0,0,0.12)",
-                background: pending ? "#f2f2f2" : "white",
+                border: "none",
+                borderRadius: 999,
+                padding: "10px 16px",
+                background: "var(--button)",
+                color: "var(--buttontext)",
                 fontWeight: 700,
-                cursor: pending ? "not-allowed" : "pointer",
+                fontSize: 14,
+                cursor: "pointer",
             }}
         >
             {pending ? "Creating..." : "Submit"}
@@ -99,9 +101,9 @@ export default function HumorFlavorsClient({
                         marginBottom: 16,
                         padding: 24,
                         borderRadius: 20,
-                        background: "rgba(255,255,255,0.92)",
-                        border: "1px solid rgba(0,0,0,0.1)",
-                        boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                        background: "var(--field)",
+                        border: "1px solid var(--bg)",
+                        boxShadow: "0 8px 24px var(--bg)",
                         boxSizing: "border-box",
                     }}
                 >
@@ -132,9 +134,9 @@ export default function HumorFlavorsClient({
                                         width: "100%",
                                         padding: "14px 16px",
                                         borderRadius: 14,
-                                        border: "1px solid rgba(0,0,0,0.15)",
+                                        border: "1px solid var(--bg)",
                                         fontSize: "1rem",
-                                        background: "white",
+                                        background: "var(--card)",
                                         boxSizing: "border-box",
                                     }}
                                 />
@@ -160,9 +162,9 @@ export default function HumorFlavorsClient({
                                         width: "100%",
                                         padding: "14px 16px",
                                         borderRadius: 14,
-                                        border: "1px solid rgba(0,0,0,0.15)",
-                                        fontSize: "1rem",
-                                        background: "white",
+                                        border: "1px solid var(--bg)",
+                                        fontSize: 18,
+                                        background: "var(--card)",
                                         boxSizing: "border-box",
                                         resize: "vertical",
                                     }}
@@ -181,11 +183,13 @@ export default function HumorFlavorsClient({
                                     onClick={() => setShowCreateForm(false)}
                                     className={fors.className}
                                     style={{
-                                        padding: "12px 18px",
-                                        borderRadius: 12,
-                                        border: "1px solid rgba(0,0,0,0.12)",
-                                        background: "#f7f7f7",
+                                        border: "none",
+                                        borderRadius: 999,
+                                        padding: "10px 16px",
+                                        background: "var(--buttontext)",
+                                        color: "var(--button)",
                                         fontWeight: 700,
+                                        fontSize: 14,
                                         cursor: "pointer",
                                     }}
                                 >
@@ -204,8 +208,8 @@ export default function HumorFlavorsClient({
                     marginTop: 0,
                     padding: 24,
                     borderRadius: 20,
-                    background: "rgba(255,255,255,0.8)",
-                    border: "1px solid rgba(0,0,0,0.1)",
+                    background: "var(--allflavorsbg)",
+                    border: "1px solid var(--bg)",
                     width: "100%",
                     maxWidth: 1200,
                     marginLeft: "auto",
@@ -224,10 +228,11 @@ export default function HumorFlavorsClient({
                             width: "100%",
                             padding: "14px 16px",
                             borderRadius: 14,
-                            border: "1px solid rgba(0,0,0,0.15)",
-                            fontSize: "1rem",
-                            background: "white",
+                            border: "1px solid var(--bg)",
+                            fontSize: 18,
+                            background: "var(--card)",
                             boxSizing: "border-box",
+                            color: "var(--text)"
                         }}
                     />
                 </div>
@@ -254,9 +259,8 @@ export default function HumorFlavorsClient({
                                     position: "relative",
                                     padding: "20px 16px 16px 16px",
                                     borderRadius: "16px",
-                                    background: "white",
-                                    border: "1px solid rgba(0,0,0,0.1)",
-                                    boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
+                                    background: "var(--card)",
+                                    border: "1px solid var(--bg)",
                                     minHeight: 140,
                                     boxSizing: "border-box",
                                     cursor: "pointer",
@@ -266,12 +270,12 @@ export default function HumorFlavorsClient({
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.transform = "translateY(-2px)";
                                     e.currentTarget.style.boxShadow =
-                                        "0 8px 18px rgba(0,0,0,0.08)";
+                                        "0 8px 18px var(--allflavorsbg)";
                                 }}
                                 onMouseLeave={(e) => {
                                     e.currentTarget.style.transform = "translateY(0)";
                                     e.currentTarget.style.boxShadow =
-                                        "0 4px 10px rgba(0,0,0,0.05)";
+                                        "0 4px 10px var(--allflavorsbg)";
                                 }}
                             >
                                 <div

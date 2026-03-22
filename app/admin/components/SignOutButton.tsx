@@ -15,12 +15,17 @@ export default function SignOutButton() {
             onClick={handleSignOut}
             className={adelia.className}
             style={{
-                marginTop: 20,
-                padding: "8px 16px",
-                borderRadius: 6,
-                border: "1px solid black",
+                border: "none",
+                borderRadius: 999,
+                padding: "10px 16px",
+                background: "var(--text)",
+                color: "var(--bg)",
+                fontWeight: 700,
+                fontSize: 14,
                 cursor: "pointer",
+                marginTop: "16px"
             }}
+
         >
             Sign Out
         </button>

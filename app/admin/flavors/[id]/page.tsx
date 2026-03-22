@@ -701,11 +701,12 @@ export default async function HumorFlavorDetailPage({
                         className={fors.className}
                         style={{
                             textDecoration: "none",
-                            color: "black",
+                            color: "var(--text)",
                             fontWeight: 700,
+                            fontSize: 14
                         }}
                     >
-                        ← Back to Humor Flavors
+                        ← BACK TO HUMOR FLAVORS
                     </Link>
                 </div>
 
@@ -715,9 +716,9 @@ export default async function HumorFlavorDetailPage({
                     style={{
                         padding: 24,
                         borderRadius: 20,
-                        background: "rgba(255,255,255,0.9)",
-                        border: "1px solid rgba(0,0,0,0.1)",
-                        boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                        background: "var(--field)",
+                        border: "1px solid var(--bg)",
+                        boxShadow: "0 8px 24px var(--bg)",
                         marginBottom: 28,
                     }}
                 >
@@ -743,7 +744,9 @@ export default async function HumorFlavorDetailPage({
                                 className={fors.className}
                                 style={{ textAlign: "left", fontSize: 14, margin: 0 }}
                             >
-                                {data.created_datetime_utc ?? "—"}
+                                CREATED {data.created_datetime_utc
+                                    ? new Date(data.created_datetime_utc).toLocaleString()
+                                    : "—"}
                             </p>
                         </div>
 
@@ -838,9 +841,9 @@ export default async function HumorFlavorDetailPage({
                     style={{
                         padding: 24,
                         borderRadius: 20,
-                        background: "rgba(255,255,255,0.9)",
-                        border: "1px solid rgba(0,0,0,0.1)",
-                        boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                        background: "var(--field)",
+                        border: "1px solid var(--bg)",
+                        boxShadow: "0 8px 24px var(--bg)",
                         marginBottom: 28
                     }}
                 >

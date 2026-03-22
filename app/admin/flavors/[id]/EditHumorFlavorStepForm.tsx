@@ -30,7 +30,7 @@ export default function EditHumorFlavorStepForm({
         width: "100%",
         padding: 12,
         borderRadius: 12,
-        border: "1px solid rgba(0,0,0,0.15)",
+        border: "1px solid var(--bg)",
         boxSizing: "border-box" as const,
         fontSize: 14,
     };
@@ -67,9 +67,9 @@ export default function EditHumorFlavorStepForm({
                         marginTop: 14,
                         padding: 20,
                         borderRadius: 16,
-                        background: "rgba(255,255,255,0.95)",
-                        border: "1px solid rgba(0,0,0,0.1)",
-                        boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                        background: "var(--bg)",
+                        border: "1px solid var(--bg)",
+                        boxShadow: "0 8px 24px var(--bg)",
                         display: "grid",
                         gap: 16,
                     }}

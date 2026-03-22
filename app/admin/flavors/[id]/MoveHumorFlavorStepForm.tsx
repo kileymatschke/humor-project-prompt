@@ -20,8 +20,8 @@ export default function MoveHumorFlavorStepForm({
                         width: 32,
                         height: 32,
                         borderRadius: 999,
-                        border: "1px solid rgba(0,0,0,0.15)",
-                        background: "white",
+                        border: "1px solid var(--bg)",
+                        background: "var(--bg)",
                         cursor: "pointer",
                         fontWeight: 700,
                     }}
@@ -41,8 +41,8 @@ export default function MoveHumorFlavorStepForm({
                         width: 32,
                         height: 32,
                         borderRadius: 999,
-                        border: "1px solid rgba(0,0,0,0.15)",
-                        background: "white",
+                        border: "1px solid var(--bg)",
+                        background: "var(--bg)",
                         cursor: "pointer",
                         fontWeight: 700,
                     }}

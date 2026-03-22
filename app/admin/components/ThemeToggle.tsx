@@ -38,9 +38,54 @@ export default function ThemeToggle() {
 
     return (
         <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => updateTheme("light")}>Light</button>
-            <button onClick={() => updateTheme("dark")}>Dark</button>
-            <button onClick={() => updateTheme("system")}>System</button>
+            <button
+                onClick={() => updateTheme("light")}
+                style={{
+                    border: "none",
+                    borderRadius: 999,
+                    padding: "10px 16px",
+                    background: "var(--button)",
+                    color: "var(--buttontext)",
+                    fontWeight: 700,
+                    fontSize: 14,
+                    cursor: "pointer",
+                }}
+            >
+                Light
+            </button>
+
+
+            <button
+                onClick={() => updateTheme("dark")}
+                style={{
+                    border: "none",
+                    borderRadius: 999,
+                    padding: "10px 16px",
+                    background: "var(--button)",
+                    color: "var(--buttontext)",
+                    fontWeight: 700,
+                    fontSize: 14,
+                    cursor: "pointer",
+                }}
+            >
+                Dark
+            </button>
+
+            <button
+                onClick={() => updateTheme("system")}
+                style={{
+                    border: "none",
+                    borderRadius: 999,
+                    padding: "10px 16px",
+                    background: "var(--button)",
+                    color: "var(--buttontext)",
+                    fontWeight: 700,
+                    fontSize: 14,
+                    cursor: "pointer",
+                }}
+            >
+                System
+            </button>
         </div>
     );
 }
