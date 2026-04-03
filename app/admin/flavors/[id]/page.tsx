@@ -746,7 +746,7 @@ export default async function HumorFlavorDetailPage({
                             >
                                 CREATED {data.created_datetime_utc
                                     ? new Date(data.created_datetime_utc).toLocaleString()
-                                    : "—"}
+                                    : "—"} (UTC)
                             </p>
                         </div>
 

@@ -27,14 +27,14 @@ export default function DeleteHumorFlavorStepForm({
             <button
                 type="submit"
                 style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: 9999,
+                    width: 32,
+                    height: 32,
+                    borderRadius: 999,
                     border: "1px solid var(--bg)",
                     background: "var(--bg)",
                     cursor: "pointer",
-                    fontWeight: 700,
-                    lineHeight: 1,
+                    fontWeight: 200,
+                    fontSize: "16px"
                 }}
                 aria-label={`Delete Step ${stepNumber}`}
                 title={`Delete Step ${stepNumber}`}
@@ -44,3 +44,4 @@ export default function DeleteHumorFlavorStepForm({
         </form>
     );
 }
+

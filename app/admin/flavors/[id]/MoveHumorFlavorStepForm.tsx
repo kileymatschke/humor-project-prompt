@@ -24,6 +24,7 @@ export default function MoveHumorFlavorStepForm({
                         background: "var(--bg)",
                         cursor: "pointer",
                         fontWeight: 700,
+                        fontSize: "16px"
                     }}
                     aria-label={`Move Step ${stepNumber ?? "—"} up`}
                     title={`Move Step ${stepNumber ?? "—"} up`}
@@ -45,6 +46,7 @@ export default function MoveHumorFlavorStepForm({
                         background: "var(--bg)",
                         cursor: "pointer",
                         fontWeight: 700,
+                        fontSize: "16px"
                     }}
                     aria-label={`Move Step ${stepNumber ?? "—"} down`}
                     title={`Move Step ${stepNumber ?? "—"} down`}

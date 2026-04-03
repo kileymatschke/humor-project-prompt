@@ -51,7 +51,7 @@ export default function ThemeToggle() {
                     cursor: "pointer",
                 }}
             >
-                Light
+                LIGHT
             </button>
 
 
@@ -68,7 +68,7 @@ export default function ThemeToggle() {
                     cursor: "pointer",
                 }}
             >
-                Dark
+                DARK
             </button>
 
             <button
@@ -84,7 +84,7 @@ export default function ThemeToggle() {
                     cursor: "pointer",
                 }}
             >
-                System
+                SYSTEM
             </button>
         </div>
     );

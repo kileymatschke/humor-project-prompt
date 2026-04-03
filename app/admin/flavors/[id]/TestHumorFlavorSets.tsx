@@ -189,6 +189,7 @@ export default function TestHumorFlavorSets({
                     {isPending ? (
                         <p className={fors.className}>
                             Testing selected set and generating captions...
+                            this will take a few moments
                         </p>
                     ) : null}
 
@@ -239,7 +240,7 @@ export default function TestHumorFlavorSets({
                                             padding: 18,
                                             borderRadius: 16,
                                             border: "1px solid rgba(0,0,0,0.12)",
-                                            background: "white",
+                                            background: "var(--card)",
                                         }}
                                     >
                                         <div
@@ -264,13 +265,15 @@ export default function TestHumorFlavorSets({
                                             <div>
                                                 <p
                                                     className={fors.className}
-                                                    style={{ fontWeight: 700, marginTop: 0 }}
+                                                    style={{ fontWeight: 700, marginTop: 0, color: "var(--text)"}}
                                                 >
                                                     Image {index + 1}
                                                 </p>
 
-                                                <p className={fors.className}>
-                                                    <strong>Image ID:</strong> {result.imageId}
+                                                <p className={fors.className}
+                                                   style={{color: "var(--text)"}}
+                                                >
+                                                    <strong>ID:</strong> {result.imageId}
                                                 </p>
 
                                                 {uniqueCaptions.length === 0 ? (
@@ -292,6 +295,7 @@ export default function TestHumorFlavorSets({
                                                                     style={{
                                                                         margin: 0,
                                                                         fontSize: 15,
+                                                                        color: "var(--text)"
                                                                     }}
                                                                 >
                                                                     {(caption as any).content}
