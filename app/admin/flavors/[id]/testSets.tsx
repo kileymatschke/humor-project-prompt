@@ -27,9 +27,9 @@ export const TEST_IMAGE_SETS: TestImageSet[] = [
         id: "set-3",
         label: "Set 3",
         images: [
-            "https://i.pinimg.com/736x/70/39/5c/70395ca176be6a4945f7b1c57e0ed5bd.jpg",
-            "https://pagesix.com/wp-content/uploads/sites/3/2023/10/NYPICHPDPICT000071536813.jpg",
-            "https://www.hollywoodintoto.com/wp-content/uploads/2025/01/Michael-Rapaport-social-media-censorship-2.jpg",
+            "https://i.redd.it/63tvnsqhzegb1.jpg",
+            "https://static01.nyt.com/images/2015/12/06/nyregion/06CHARACTER/06CHARACTER-superJumbo.jpg",
+            "https://www.geo.tv/assets/uploads/updates/2026-01-01/642697_9825106_updates.jpg",
         ],
     },
 ];
