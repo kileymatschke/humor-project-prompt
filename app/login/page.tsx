@@ -1,8 +1,7 @@
 "use client";
 
 import { createClient } from "../../lib/supabase/browser";
-import { adelia } from "../admin/fonts/fonts";
-import { kindergarten } from "../admin/fonts/fonts";
+import { adelia, fors, kindergarten } from "../admin/fonts/fonts";
 
 export default function LoginPage() {
     const supabase = createClient();
@@ -13,7 +12,7 @@ export default function LoginPage() {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: `${origin}/auth/callback`, // EXACT
+                redirectTo: `${origin}/auth/callback`,
             },
         });
 
@@ -26,12 +25,24 @@ export default function LoginPage() {
                 minHeight: "100vh",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
+                justifyContent: "flex-start",
                 alignItems: "center",
-                gap: "20px"
+                paddingTop: "120px",
             }}
         >
-            {/*<h1 style={{ fontSize: "40px"}} className={adelia.className}>Sign in</h1>*/}
+            <h1
+                style={{
+                    fontSize: "35px",
+                    marginBottom: "20px",
+                    textAlign: "center",
+                    lineHeight: 1.6,
+                }}
+                className={adelia.className}
+            >
+                The Humor Project:
+                <br />
+                Prompt Chain Tool
+            </h1>
 
             <button
                 onClick={signInWithGoogle}
@@ -42,13 +53,37 @@ export default function LoginPage() {
                     background: "var(--text)",
                     color: "var(--bg)",
                     fontWeight: 700,
-                    fontSize: 24,
+                    fontSize: 18,
                     cursor: "pointer",
+                    marginTop: 12,
+                    marginBottom: 20,
                 }}
                 className={adelia.className}
             >
                 Sign in with Google
             </button>
+
+            <p
+                style={{
+                    fontSize: 16,
+                    margin: 0,
+                    lineHeight: 1.2,
+                }}
+                className={fors.className}
+            >
+                Superadmin or matrix admin status required for access.
+            </p>
+
+            <p
+                style={{
+                    fontSize: 16,
+                    margin: 0,
+                    lineHeight: 1.2,
+                }}
+                className={fors.className}
+            >
+                You will be redirected back to this page if access is denied.
+            </p>
         </main>
     );
 }

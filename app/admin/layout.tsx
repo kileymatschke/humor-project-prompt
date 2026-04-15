@@ -34,7 +34,7 @@ export default async function AdminLayout({
 
     // If neither role → block access
     if (!isAuthorized) {
-        redirect("/");
+        redirect("/login");
     }
 
     return <>{children}</>;

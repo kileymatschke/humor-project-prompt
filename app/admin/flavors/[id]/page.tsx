@@ -9,6 +9,7 @@ import AddHumorFlavorStepForm from "./AddHumorFlavorStepForm";
 import DeleteHumorFlavorStepForm from "./DeleteHumorFlavorStepForm";
 import EditableHumorFlavorStepCard from "./EditableHumorFlavorStepCard";
 import MoveHumorFlavorStepForm from "./MoveHumorFlavorStepForm";
+import DuplicateHumorFlavorForm from "./DuplicateHumorFlavorForm";
 import TestHumorFlavorSets, {
     type TestHumorFlavorState,
 } from "./TestHumorFlavorSets";
@@ -127,6 +128,35 @@ function normalizeContentType(contentType: string | null) {
     return contentType.split(";")[0].trim().toLowerCase();
 }
 
+async function getUniqueDuplicatedSlug(
+    supabase: Awaited<ReturnType<typeof createClient>>,
+    originalSlug: string
+) {
+    const trimmedOriginal = originalSlug.trim();
+    const baseSlug = `${trimmedOriginal} Copy`;
+    let candidate = baseSlug;
+    let copyNumber = 2;
+
+    while (true) {
+        const { data, error } = await supabase
+            .from("humor_flavors")
+            .select("id")
+            .eq("slug", candidate)
+            .maybeSingle();
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        if (!data) {
+            return candidate;
+        }
+
+        candidate = `${baseSlug} ${copyNumber}`;
+        copyNumber += 1;
+    }
+}
+
 export default async function HumorFlavorDetailPage({
                                                         params,
                                                     }: {
@@ -184,6 +214,84 @@ export default async function HumorFlavorDetailPage({
         revalidatePath("/admin/flavors");
         revalidatePath(`/admin/flavors/${numericId}`);
         redirect(`/admin/flavors/${numericId}`);
+    }
+
+    async function duplicateHumorFlavor() {
+        "use server";
+
+        const supabase = await createClient();
+
+        const { data: flavor, error: flavorError } = await supabase
+            .from("humor_flavors")
+            .select("*")
+            .eq("id", numericId)
+            .single();
+
+        if (flavorError || !flavor) {
+            throw new Error(flavorError?.message ?? "Humor flavor not found.");
+        }
+
+        const { data: originalSteps, error: stepsError } = await supabase
+            .from("humor_flavor_steps")
+            .select("*")
+            .eq("humor_flavor_id", numericId)
+            .order("order_by", { ascending: true });
+
+        if (stepsError) {
+            throw new Error(stepsError.message);
+        }
+
+        const newSlug = await getUniqueDuplicatedSlug(
+            supabase,
+            flavor.slug ?? "Untitled Flavor"
+        );
+        const now = new Date().toISOString();
+
+        const { data: newFlavor, error: insertFlavorError } = await supabase
+            .from("humor_flavors")
+            .insert({
+                slug: newSlug,
+                description: flavor.description,
+                created_datetime_utc: now,
+            })
+            .select("id")
+            .single();
+
+        if (insertFlavorError || !newFlavor) {
+            throw new Error(
+                insertFlavorError?.message ?? "Failed to duplicate humor flavor."
+            );
+        }
+
+        if (originalSteps && originalSteps.length > 0) {
+            const duplicatedSteps = originalSteps.map((step) => ({
+                humor_flavor_id: newFlavor.id,
+                created_datetime_utc: now,
+                order_by: step.order_by,
+                llm_input_type_id: step.llm_input_type_id,
+                llm_output_type_id: step.llm_output_type_id,
+                llm_model_id: step.llm_model_id,
+                humor_flavor_step_type_id: step.humor_flavor_step_type_id,
+                llm_temperature: step.llm_temperature,
+                llm_system_prompt: step.llm_system_prompt,
+                llm_user_prompt: step.llm_user_prompt,
+                description: step.description,
+            }));
+
+            const { error: insertStepsError } = await supabase
+                .from("humor_flavor_steps")
+                .insert(duplicatedSteps);
+
+            if (insertStepsError) {
+                throw new Error(insertStepsError.message);
+            }
+        }
+
+        revalidatePath("/admin/flavors");
+        revalidatePath(`/admin/flavors/${numericId}`);
+        revalidatePath(`/admin/flavors/${newFlavor.id}`);
+
+        redirect(`/admin/flavors/${newFlavor.id}`);
     }
 
     async function addHumorFlavorStep(formData: FormData) {
@@ -703,14 +811,12 @@ export default async function HumorFlavorDetailPage({
                             textDecoration: "none",
                             color: "var(--text)",
                             fontWeight: 700,
-                            fontSize: 14
+                            fontSize: 14,
                         }}
                     >
                         ← BACK TO HUMOR FLAVORS
                     </Link>
                 </div>
-
-
 
                 <div
                     style={{
@@ -744,35 +850,13 @@ export default async function HumorFlavorDetailPage({
                                 className={fors.className}
                                 style={{ textAlign: "left", fontSize: 14, margin: 0 }}
                             >
-                                CREATED {data.created_datetime_utc
+                                CREATED{" "}
+                                {data.created_datetime_utc
                                     ? new Date(data.created_datetime_utc).toLocaleString()
-                                    : "—"} (UTC)
+                                    : "—"}{" "}
+                                (UTC)
                             </p>
                         </div>
-
-                        {/*<div*/}
-                        {/*    style={{*/}
-                        {/*        display: "flex",*/}
-                        {/*        gap: 12,*/}
-                        {/*        alignItems: "center",*/}
-                        {/*        flexWrap: "wrap",*/}
-                        {/*        justifyContent: "flex-end",*/}
-                        {/*    }}*/}
-                        {/*>*/}
-
-                        {/*    <EditHumorFlavorForm*/}
-                        {/*        slug={data.slug}*/}
-                        {/*        description={data.description}*/}
-                        {/*        updateHumorFlavor={updateHumorFlavor}*/}
-                        {/*    />*/}
-
-                        {/*    <DeleteHumorFlavorForm*/}
-                        {/*        deleteHumorFlavor={deleteHumorFlavor}*/}
-                        {/*        slug={data.slug}*/}
-                        {/*    />*/}
-
-
-                        {/*</div>*/}
                     </div>
 
                     <p
@@ -799,26 +883,30 @@ export default async function HumorFlavorDetailPage({
                         {data.description ?? "—"}
                     </p>
 
-
                     <div
                         style={{
                             display: "flex",
-                            gap: 12,            // 👈 horizontal space between buttons
+                            gap: 12,
                             alignItems: "center",
-                            flexWrap: "wrap",   // 👈 keeps it responsive
+                            flexWrap: "wrap",
                         }}
                     >
-
                         <EditHumorFlavorForm
                             slug={data.slug}
                             description={data.description}
                             updateHumorFlavor={updateHumorFlavor}
                         />
 
+                        <DuplicateHumorFlavorForm
+                            duplicateHumorFlavor={duplicateHumorFlavor}
+                        />
+
                         <DeleteHumorFlavorForm
                             deleteHumorFlavor={deleteHumorFlavor}
                             slug={data.slug}
                         />
+
+
 
                         <HumorFlavorCaptionsGallery items={captionsGalleryItems} />
 
@@ -828,13 +916,6 @@ export default async function HumorFlavorDetailPage({
                             testHumorFlavorSetAction={testHumorFlavorSet}
                         />
                     </div>
-
-
-                    {/*<TestHumorFlavorSets*/}
-                    {/*    humorFlavorId={numericId}*/}
-                    {/*    testSets={TEST_IMAGE_SETS}*/}
-                    {/*    testHumorFlavorSetAction={testHumorFlavorSet}*/}
-                    {/*/>*/}
                 </div>
 
                 <div
@@ -844,7 +925,7 @@ export default async function HumorFlavorDetailPage({
                         background: "var(--field)",
                         border: "1px solid var(--bg)",
                         boxShadow: "0 8px 24px var(--bg)",
-                        marginBottom: 28
+                        marginBottom: 28,
                     }}
                 >
                     <h2
@@ -884,14 +965,6 @@ export default async function HumorFlavorDetailPage({
                         </div>
                     )}
                 </div>
-
-
-
-
-
-
-
-
             </div>
         </main>
     );
