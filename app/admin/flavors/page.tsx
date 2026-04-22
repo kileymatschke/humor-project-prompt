@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "../../../lib/supabase/server";
-import { adelia } from "../fonts/fonts";
+import { adelia, fors } from "../fonts/fonts";
 import HumorFlavorsClient from "./HumorFlavorsClient";
 import SignOutButton from "../components/SignOutButton";
 
@@ -70,9 +70,16 @@ export default async function HumorFlavorsPage() {
 
     return (
         <main style={{ padding: 24, minHeight: "100vh" }}>
+            <p
+                className={fors.className}
+                style={{ marginBottom: 8, textAlign: "center", fontSize: 16, fontWeight: 1000 }}
+            >
+                THE HUMOR PROJECT: PROMPT CHAIN TOOL
+            </p>
+
             <h1
                 className={adelia.className}
-                style={{ textAlign: "center", fontSize: 48, marginBottom: 2 }}
+                style={{ textAlign: "center", fontSize: 40, marginTop: 0, marginBottom: 2 }}
             >
                 Humor Flavors
             </h1>

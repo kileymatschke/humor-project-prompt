@@ -854,7 +854,7 @@ export default async function HumorFlavorDetailPage({
                                 {data.created_datetime_utc
                                     ? new Date(data.created_datetime_utc).toLocaleString()
                                     : "—"}{" "}
-                                (UTC)
+
                             </p>
                         </div>
                     </div>
